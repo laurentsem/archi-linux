@@ -18,7 +18,7 @@ Les packages suivants seront nécessaires au bon fonctionnement du script. Veuil
     mysql-server
 ```
 
-### Script du monitoring d'un site web (monitor_website.sh)
+### Script du monitoring d'un site web (monitor_website.sh $nom_domaine)
 
 
 ### Script de sauvegarde de la bdd + dossier uploads de Wordpress (backup.sh)

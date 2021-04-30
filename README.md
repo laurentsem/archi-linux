@@ -10,7 +10,7 @@ Pour exécuter un script :
 ```
 ./nom_du_script
 ```
-### deploy_website.sh nom_domaine
+### deploy_website.sh -d nom_domaine -b nom_bdd -u utilisateur_sql -p mdp_sql
 Permet de déployer Wordpress dans un nom de domaine et lancer le site web.
 Les packages suivants seront nécessaires au bon fonctionnement du script. Veuillez à faire manuellement vos configurations :
 ```
@@ -23,7 +23,7 @@ Ajouter le nom de domaine dans /etc/hosts de votre ordinateur:
 ```
 adresse_ip www.nom_domaine nom_domaine
 ```
-### monitor_website.sh -d nom_domaine -b nom_bdd -u utilisateur_sql -p mdp_sql
+### monitor_website.sh -d nom_domaine
 Permet de bannir les adresses IP qui ont essayé mais échoué de se connecter 3 fois ou plus aux site web.
 
 ### backup.sh 

@@ -10,7 +10,8 @@ Pour exécuter un script :
 ```
 ./nom_du_script
 ```
-### Script de déploiement d'un site Wordpress avec nom de domaine choisi (deploy_website.sh $nom_domaine)
+### deploy_website.sh $nom_domaine
+Permet de déployer Wordpress dans un nom de domaine et lancer le site web.
 Les packages suivants seront nécessaires au bon fonctionnement du script. Veuillez à faire manuellement vos configurations :
 ```
     apache2
@@ -18,7 +19,8 @@ Les packages suivants seront nécessaires au bon fonctionnement du script. Veuil
     mysql-server
 ```
 
-### Script du monitoring d'un site web (monitor_website.sh $nom_domaine)
+### monitor_website.sh -d nom_domaine
+Permet de bannir les connexions non désirées au site web. 
 
-
-### Script de sauvegarde de la bdd + dossier uploads de Wordpress (backup.sh)
+### backup.sh
+Permet de sauvegarder la base de données du site ainsi que le dossier 'uploads' de Wordpress dans une archive sur un serveur backup. 

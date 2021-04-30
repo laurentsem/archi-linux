@@ -1,7 +1,7 @@
 # archi-linux
 
 ## Exécuter un script
-:warning: : avant d'exécuter un script, il faut le rendre exécutable :
+:warning: avant d'exécuter un script, il faut le rendre exécutable :
 ```
 chmod +x nom_du_script
 ```
@@ -19,8 +19,12 @@ Les packages suivants seront nécessaires au bon fonctionnement du script. Veuil
     mysql-server
 ```
 
+Ajouter le nom de domaine dans /etc/hosts :
+```
+adresse_ip www.$nom_domaine $nom_domaine
+```
 ### monitor_website.sh -d nom_domaine
-Permet de bannir les connexions non désirées au site web. 
+Permet de bannir les adresses IP dont les connexions au site web sont faux. 
 
 ### backup.sh
 Permet de sauvegarder la base de données du site ainsi que le dossier 'uploads' de Wordpress dans une archive sur un serveur backup. 

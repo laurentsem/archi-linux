@@ -2,28 +2,30 @@
 # script0.sh
 
 #On verifie que notre fichier de destination temporaire exist
-DOSSIER=/home/save_BD
+GetDB() {
+MDP="$1"
+DOSSIER="$2"
 if [ -d ${DOSSIER} ]; then
 sudo rm -rf ${DOSSIER}
 echo "Le dossier existe deja, nous l'effacons"
 fi
-sudo mkdir ${DOSSIER}
-echo "Le dossier ${DOSSIER} est crée"
+sudo mkdir $DOSSIER
+echo "Le dossier save_BD est crée"
 # On liste nos bases de donnees
-
-LISTEBDD=$( echo "show databases" | mysql -uroot -p'codingfactory' )
+LISTEBDD=$( echo "show databases" | mysql -uroot -p$MDP )
 for BDD in $LISTEBDD; do
 # Exclusion des BDD information_schema , mysql et Database
-if [[ $BDD != "information_schema" ]] && [[ $BDD != "mysql" ]] && [[ $BDD != "Database" ]] && [[ $BDD != "sys" ]] && [[ $BDD != "performance_schema" ]];  then
-# Emplacement du dossier ou nous allons stocker les bases de données, un dossier par base de données
-CHEMIN=/home/save_BD
-sudo mkdir $CHEMIN
+if [[ $BDD != "information_schema" ]] && [[ $BDD != "mysql" ]] && [[ $BDD != "Database" ]] && [[ $BDD != "sys" ]] && [[ $BDD != "performance_schema" ]];  then 
 # On backup notre base de donnees
-sudo mysqldump -u root $BDD -p'codingfactory' > $CHEMIN/$BDD.sql
-echo "|Sauvegarde de la base de donnees $BDD.sql ";
+sudo mysqldump -u root $BDD -p$MDP > $DOSSIER/$BDD.sql
+echo "Sauvegarde de la base de donnees $BDD.sql ";
 fi
 done
-cd ../../save_BD/
+}
+
+SendBackUpToVm(){
+DOSSIER="$1"
+cd $DOSSIER
 sudo tar czvf `date -I`_codingfactory.tgz /var/www/codingfactory/wp-content/uploads/ *.sql
 bool='false'
 while [ $bool = false ]; do
@@ -46,3 +48,10 @@ else
 bool='false'
 fi
 done
+}
+
+DOSSIER='../../../var/tmp/save_BD/'
+read -p "Saisir le mot de passe de la base de données: " MDP
+
+GetDB $MDP $DOSSIER
+SendBackUpToVm $DOSSIER

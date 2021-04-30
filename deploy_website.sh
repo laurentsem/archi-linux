@@ -6,11 +6,9 @@ GROUP="www-data"
 if [ -z $1 ]; then
     echo "need one param"
     exit
-else
-    echo "there is param"
 fi
 
-DOMAINNAME=$1
+domain_name=$1
 USER="${1%%.*}"
 
 if grep "^$GROUP" /etc/group > /dev/null; then
@@ -30,32 +28,32 @@ else
     useradd $USER && gpasswd -a $USER $GROUP
 fi
 
-if [ -e /var/www/$DOMAINNAME ]; then
-    echo "directory domain: '$DOMAINNAME' exist, recreate $DOMAINNAME "
-    rm -r /var/www/$DOMAINNAME
-    cd /var/www/ && wget https://fr.wordpress.org/latest-fr_FR.tar.gz && tar -zxf latest-fr_FR.tar.gz && mv wordpress/ $DOMAINNAME && rm -r latest-fr_FR.tar.gz 
+if [ -e /var/www/$domain_name ]; then
+    echo "directory domain: '$domain_name' exist, recreate $domain_name "
+    rm -r /var/www/$domain_name
+    cd /var/www/ && wget https://fr.wordpress.org/latest-fr_FR.tar.gz && tar -zxf latest-fr_FR.tar.gz && mv wordpress/ $domain_name && rm -r latest-fr_FR.tar.gz 
 else
-    echo "creating directory domain: '$DOMAINNAME'"
-    cd /var/www/ && wget https://fr.wordpress.org/latest-fr_FR.tar.gz && tar -zxf latest-fr_FR.tar.gz && mv wordpress/ $DOMAINNAME && rm -r latest-fr_FR.tar.gz 
+    echo "creating directory domain: '$domain_name'"
+    cd /var/www/ && wget https://fr.wordpress.org/latest-fr_FR.tar.gz && tar -zxf latest-fr_FR.tar.gz && mv wordpress/ $domain_name && rm -r latest-fr_FR.tar.gz 
 fi
 
-VIRTUALHOST="${DOMAINNAME}.conf"
+virtual_host="${domain_name}.conf"
 
-if [ -e /etc/apache2/sites-available/$VIRTUALHOST ]; then
-    echo "file virtualhost: '$VIRTUALHOST' exist, recreate $VIRTUALHOST "
-    rm -r /etc/apache2/sites-available/$VIRTUALHOST
+if [ -e /etc/apache2/sites-available/$virtual_host ]; then
+    echo "file virtualhost: '$virtual_host' exist, recreate $virtual_host "
+    rm -r /etc/apache2/sites-available/$virtual_host
     cd /etc/apache2/sites-available/ && echo "<VirtualHost *:80>
-    DocumentRoot "/var/www/${DOMAINNAME}"
-    ServerName www.${DOMAINNAME}
-    ServerAlias ${DOMAINNAME}
-    CustomLog "/var/log/apache2/access.${DOMAINNAME}.log" common
-</VirtualHost>" > $VIRTUALHOST && a2ensite $VIRTUALHOST && service apache2 restart
+    DocumentRoot "/var/www/${domain_name}"
+    ServerName www.${domain_name}
+    ServerAlias ${domain_name}
+    CustomLog "/var/log/apache2/access.${domain_name}.log" common
+</VirtualHost>" > $virtual_host && a2ensite $virtual_host && apache2ctl -t && service apache2 restart
 else
-    echo "creating file virtualhost: '$VIRTUALHOST'"
+    echo "creating file virtualhost: '$virtual_host'"
     cd /etc/apache2/sites-available/ && echo "<VirtualHost *:80>
-    DocumentRoot "/var/www/${DOMAINNAME}"
-    ServerName www.${DOMAINNAME}
-    ServerAlias ${DOMAINNAME}
-    CustomLog "/var/log/apache2/access.${DOMAINNAME}.log" common
-</VirtualHost>" > $VIRTUALHOST && a2ensite $VIRTUALHOST && apache2ctl restart
+    DocumentRoot "/var/www/${domain_name}"
+    ServerName www.${domain_name}
+    ServerAlias ${domain_name}
+    CustomLog "/var/log/apache2/access.${domain_name}.log" common
+</VirtualHost>" > $virtual_host && a2ensite $virtual_host && apache2ctl -t && service apache2 restart
 fi
